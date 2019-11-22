@@ -1,2 +1,2 @@
-# electric_vehicles_analysis
-Analyzing various factors fo deciding between electric and gasoline vehicles
+# Electric Vehicles Analysis
+Analyzing various factors for deciding between electric and gasoline vehicles
