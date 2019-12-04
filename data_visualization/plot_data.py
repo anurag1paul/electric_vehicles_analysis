@@ -322,3 +322,100 @@ def plot_maintenance():
     ax.xaxis.set_ticks_position('bottom')
     plt.show()
 
+
+def plot_costs_pie(costs_dict, title):
+    fig, ax = plt.subplots(figsize=(16, 9), dpi=200, subplot_kw=dict(aspect="equal"))
+
+    costs = list(costs_dict.keys())
+    data = [costs_dict[key] for key in costs]
+
+    t = []
+    for c in costs:
+        if c != "env":
+            t.append(c.title())
+        else:
+            t.append("Environment")
+
+    def func(pct):
+        return "{:.1f}%".format(pct)
+
+    wedges, texts, autotexts = ax.pie(data, autopct=lambda pct: func(pct), pctdistance=0.75,
+                            textprops=dict(color="w"), wedgeprops=dict(width=0.5), startangle=-40)
+
+    plt.setp(autotexts, size=16, weight="bold")
+
+    bbox_props = dict(boxstyle="square,pad=0.4", fc="w", ec="k", lw=0)
+    kw = dict(arrowprops=dict(arrowstyle="-"),
+              bbox=bbox_props, zorder=0, va="center")
+
+    for i, p in enumerate(wedges):
+        ang = (p.theta2 - p.theta1)/2. + p.theta1
+        y = np.sin(np.deg2rad(ang))
+        x = np.cos(np.deg2rad(ang))
+        horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
+        connectionstyle = "angle,angleA=0,angleB={}".format(ang)
+        kw["arrowprops"].update({"connectionstyle": connectionstyle})
+        ax.annotate(t[i], xy=(x, y), xytext=(1.25*np.sign(x), 1.2*y),
+                    horizontalalignment=horizontalalignment, fontsize=18, **kw)
+
+    ax.set_title(title, fontsize=20)
+
+    plt.show()
+
+
+def plot_all_cars_costs_pie(df):
+    national = df[["base", "fuel", "maintenance", "insurance", "env"]]
+    avg = dict(national.mean())
+    plot_costs_pie(avg, "Average Cost Breakdown")
+
+
+def plot_electric_cars_costs_pie(df):
+    electric = df[df["fuel_type"] == "e"]
+    avg_e = dict(electric[["base", "fuel", "maintenance", "insurance"]].mean())
+    plot_costs_pie(avg_e, "Electric Vehicle Cost Breakdown")
+
+
+def plot_gasoline_cars_costs_pie(df):
+    gas = df[df["fuel_type"] == "g"]
+    avg_g = dict(gas[["base", "fuel", "maintenance", "insurance", "env"]].mean())
+    plot_costs_pie(avg_g, "Gasoline Vehicle Cost Breakdown")
+
+
+def plot_cheapest_cars(df, k=5, name=""):
+    topk = df.nsmallest(k, "total")
+
+    fig, ax = plt.subplots(figsize=(10, 7), dpi=200)
+
+    # Example data
+    cars = [s.replace("Chevrolet", "Chevy") for s in list(topk["name"])]
+
+    x_pos = np.arange(k)
+
+    buffer = np.zeros(k)
+    names = []
+
+    for col in topk.columns[2:-1]:
+        if col != "env":
+            l = col.title()
+        else:
+            l = "Environment"
+
+        ax.bar(x_pos, list(topk[col]), align='center', bottom = buffer, label=l)
+        buffer += np.array(topk[col])
+
+    # Hide the right and top spines
+    ax.spines['right'].set_visible(False)
+    ax.spines['top'].set_visible(False)
+
+    ax.set_xticks(x_pos)
+    ax.set_xticklabels(cars, fontsize=12)
+    ax.set_yticks(np.arange(0, 140000, 20000))
+    ax.set_ylabel('Total Cost ($)', fontsize=14)
+    ax.legend(fontsize=14)
+    ax.set_title('Top 5 Cheapest {} Cars'.format(name), fontsize=18)
+    plt.xticks(rotation=30)
+    for tick in ax.yaxis.get_major_ticks():
+        tick.label.set_fontsize(12)
+
+    plt.show()
+
