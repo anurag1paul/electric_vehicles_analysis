@@ -8,6 +8,11 @@ from data_scraping.gas_prices import get_state_dict
 
 
 def get_states_ranking():
+    """
+    Ranks the states by the average total cost of the
+    cheapest 5 electric cars in that state
+    :return: dataframe of states
+    """
     cheapest = None
     for state in state_list:
         df = get_df(state=state)

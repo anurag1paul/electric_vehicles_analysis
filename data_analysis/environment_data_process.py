@@ -1,8 +1,6 @@
-import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
-import xlrd
-import csv
+
 
 ## data source : https://www.eia.gov/tools/faqs/faq.php?id=74&t=11
 dataElectric = pd.read_excel('annual_generation_state.xls')
@@ -14,6 +12,7 @@ dataCarbon = dataCarbon[dataCarbon['State']!='DC']
 dataCarbon = dataCarbon[dataCarbon['State']!= 'US-TOTAL']
 dataCarbon = dataCarbon[dataCarbon['Energy Source'] == 'All Sources']
 dataCarbon = np.asarray(dataCarbon)
+
 ## for electricity data :
 dataElectric.reindex(['a','b','c','d','e','f'])
 b=dataElectric.columns
@@ -32,11 +31,12 @@ E = np.asarray(E)
 dataElectric = E
 #################
 
+
 def emissionDict(dataCarbon) :
-    '''
+    """
     @dataCarbon : Carbon emission data
     @return : a dictionary with key = state name, value = CO2 emission
-    '''
+    """
     assert isinstance(dataCarbon,pd.DataFrame)
     prev = 'AK'
     index,sumOfEmissions = 0,0
@@ -52,11 +52,12 @@ def emissionDict(dataCarbon) :
     emissionDict['Wyoming'] = sumOfEmissions
     return emissionDict
 
+
 def ele_generation(dataElectric) :
-    '''
+    """
     @dataElectric : electricity generation in each state
     @return : a dictionary with key = state name, value = electricity generation
-    '''
+    """
     assert isinstance(dataElectric,pd.DataFrame)
     generationDict = {}
     for i in range(len(dataElectric)) :
@@ -66,11 +67,11 @@ def ele_generation(dataElectric) :
 
 
 def co2_per_mwh(generationDict,emissionDict) :
-    '''
+    """
     @dataElectric : annual electricity generation in each state
     @dataCarbon : annual CO2 emission generation in each state
     @return : a dictionary with key = states name, value : CO2 emission per mwh electricity
-    '''
+    """
     assert isinstance(generationDict,dict)
     assert isinstance(emissionDict,dict)
     perMPH = {}
@@ -78,12 +79,13 @@ def co2_per_mwh(generationDict,emissionDict) :
         perMPH[name] = emissionDict[name]*1.0 / generationDict[name]
     return perMPH
 
+
 def generate_csv(perMPH) :
-    '''
+    """
     This function writes a csv file with state name as index and
     the value of CO2 generation per mwh electricity as column
     @perMPH : a dictionary
-    '''
+    """
     my_dict = perMPH
     with open('co2_mwh.csv', 'w') as f:
         f.write('states,co2/mwh\n')

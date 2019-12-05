@@ -1,7 +1,5 @@
 import pandas as pd
 from fuzzywuzzy import fuzz
-from fuzzywuzzy import process
-import numpy as np
 
 state_list = ["AK", "AL", "AR", "AZ", "CA", "CO", "CT", "DE", "FL", "GA", "HI",
               "IA", "ID", "IL", "IN", "KS", "KY", "LA", "MA", "MD", "ME", "MI",
@@ -74,7 +72,7 @@ us_state_abbrev = {
 #     kwh/1mile = kwh/1km / 0.621371
 #   ->kwh/1mile = 33.7 / MPGe
 # This function is created by Yuepeng, Jiang
-def ele_Cost(miles, elePrice, MPGe):
+def ele_cost(miles, elePrice, MPGe):
     '''
     @miles : total miles for a certain type of user
     @elePrice : electricity price in each state
@@ -86,7 +84,7 @@ def ele_Cost(miles, elePrice, MPGe):
 
 
 # This function is created by Yuepeng, Jiang
-def fuel_Cost(miles, fuelPrice, mpg):
+def fuel_cost(miles, fuelPrice, mpg):
     """
     @milse: total miles
     @fuelPrice : gas price in specific state
@@ -99,8 +97,10 @@ def fuel_Cost(miles, fuelPrice, mpg):
 
 # Environment Cost:
 #     the average price to reduce 1 ton of CO2 is 50$
-#     Accoring to mpg we know miles/gallon; 8.89kg CO2 is generated per gallon; So we know that how much is it to reduce CO2.
-#     For EV cars, we get data of how much CO2 is generated per mwh(Electricity unit) in each states. So we can know how much is it to reduce co2 for ev
+#     Accoring to mpg we know miles/gallon; 8.89kg CO2 is generated per gallon;
+#       So we know that how much is it to reduce CO2.
+#     For EV cars, we get data of how much CO2 is generated per mwh(Electricity
+# unit) in each states. So we can know how much is it to reduce co2 for ev
 # This function is created by Yuepeng, Jiang
 def env_fuel_car(miles, mpg, mPerGallon=8.89, priceToReduce=50):
     '''
@@ -164,7 +164,8 @@ def import_all_data():
          'year']]
     fuel_economy_data = fuel_economy_data[fuel_economy_data["year"] > 2018]
 
-    return insurance_msrp, electricity_data, gas_price, co2_mwh, maintenance_data, fuel_economy_data
+    return (insurance_msrp, electricity_data, gas_price, co2_mwh,
+            maintenance_data, fuel_economy_data)
 
 
 def build_model_data_dict(insurance_msrp, electricity_data, gas_price, co2_mwh,
@@ -172,9 +173,9 @@ def build_model_data_dict(insurance_msrp, electricity_data, gas_price, co2_mwh,
                           mpg_threshold=70):
     """
     aggregate all dataframe into one master dictionary
-    :param: insurance_msrp, electricity_data, gas_price, co2_mwh, maintenance_data, fuel_economy_data, mpg_threshold
+    :param: insurance_msrp, electricity_data, gas_price, co2_mwh,
+    maintenance_data, fuel_economy_data, mpg_threshold
     :type: DataFrame, DataFrame, DataFrame, DataFrame, DataFrame, DataFrame, int
-
     :return: dict
     """
 
@@ -226,13 +227,13 @@ def build_model_data_dict(insurance_msrp, electricity_data, gas_price, co2_mwh,
                 if mpg >= mpg_threshold:
                     # for EV
                     electricity = electricity_data.at[state, '201908'] / 100
-                    fuel_cost = ele_Cost(mileage, electricity, mpg)
+                    fuel_cost = ele_cost(mileage, electricity, mpg)
                     env_cost = env_ev_car(mileage, mpg,
                                           co2_mwh.at[state, 'co2/mwh'])
                 else:
                     # for fuel car
                     gas = gas_price.at[state, 'prices']
-                    fuel_cost = fuel_Cost(mileage, gas, mpg)
+                    fuel_cost = fuel_cost(mileage, gas, mpg)
                     env_cost = env_fuel_car(mileage, mpg)
 
                 maintenance_cost = int(
