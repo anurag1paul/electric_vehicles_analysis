@@ -13,10 +13,10 @@ def scrape_insurance_data():
 
     for h in tqdm(range(1, 51)):
         url = (
-                "https://www.insure.com/car-insurance/car-insurance-comparison/" +
-                "results?make_id=all&model_name=all&car_type_id=all" +
-                "&state_code_id={0}&state_code={1}&page={2}" +
-                "&sortby=make&order=asc").format(h, state_list[h - 1], 1)
+               "https://www.insure.com/car-insurance/car-insurance-comparison" +
+               "/results?make_id=all&model_name=all&car_type_id=all" +
+               "&state_code_id={0}&state_code={1}&page={2}" +
+               "&sortby=make&order=asc").format(h, state_list[h - 1], 1)
         html = requests.get(url).content
         df_temp = pd.read_html(html)
         df_list = df_temp[0]

@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
 
+from data_analysis.cost_model import state_list
+
 
 def get_df(user_id=12000, state="all"):
     """
@@ -9,7 +11,9 @@ def get_df(user_id=12000, state="all"):
     :param state: all or a specific US state abbreviation
     :return: dataframe
     """
-    assert user_id in {6000, 12000, 18000}
+    assert isinstance(user_id, int) and user_id in {6000, 12000, 18000}
+    assert isinstance(state, str) and (state == "all" or state in state_list)
+
     user_id *= 10
 
     data = np.load("data/master_dict.npy", allow_pickle=True).item()

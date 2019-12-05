@@ -34,6 +34,8 @@ def plot_topk_states(k=5):
     :param k: number of states
     :return: None
     """
+    assert isinstance(k, int) and 0 < k <= 25
+
     cheapest = get_states_ranking()
     res = pd.concat((cheapest.nsmallest(k, "total"),
                      cheapest.nlargest(k, "total")))

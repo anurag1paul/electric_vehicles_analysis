@@ -37,7 +37,7 @@ def emissionDict(dataCarbon) :
     @dataCarbon : Carbon emission data
     @return : a dictionary with key = state name, value = CO2 emission
     """
-    assert isinstance(dataCarbon,pd.DataFrame)
+    assert isinstance(dataCarbon, pd.DataFrame)
     prev = 'AK'
     index,sumOfEmissions = 0,0
     emissionDict = {}

@@ -23,6 +23,13 @@ def get_sales_df(data_file="data/ElectricSales.csv"):
 
 
 def plot_sales_trend(sales_df):
+    """
+    Plot sales trend of electric vehicles
+    :param sales_df: dataframe
+    :return: None
+    """
+    assert isinstance(sales_df, pd.DataFrame)
+
     df = sales_df
     fig, ax = plt.subplots(dpi=200)
     ax.set_xlabel('Year', fontsize='14')
@@ -42,6 +49,13 @@ def plot_sales_trend(sales_df):
 
 
 def get_sales_projection(df):
+    """
+    Generate sales projection for electric and plug-in hybrid vehicles
+    :param df: data-frame
+    :return:
+    """
+    assert isinstance(df, pd.DataFrame)
+
     z1 = np.polyfit(df.index, df.Electric, 2)
     z2 = np.polyfit(df.index, df['Plug-in hybrid-electric'], 2)
     p1 = np.poly1d(z1)
@@ -51,6 +65,13 @@ def get_sales_projection(df):
 
 
 def plot_sales_projection(sales_df):
+    """
+    Plot sales projection for electric and hybrid vehicles
+    :param sales_df: dataframe
+    :return: None
+    """
+    assert isinstance(sales_df, pd.DataFrame)
+
     df = sales_df
 
     p1, p2 = get_sales_projection(df)
@@ -77,6 +98,10 @@ def plot_sales_projection(sales_df):
 
 
 def plot_total_sales():
+    """
+    Plot total sales over the last decade
+    :return:
+    """
     data1 = 'data/TotalSales.csv'
     df = pd.read_csv(data1, index_col=0)
 
@@ -96,6 +121,10 @@ def plot_total_sales():
 
 
 def get_total_sales_prediction():
+    """
+    Generate sales projection for the next 5 years
+    :return: projection, dataframe
+    """
     data = 'data/TotalSalesFullExtra.csv'
     df = pd.read_csv(data, index_col=0)
     z = np.polyfit(df.index, df['Total new passenger car sales'], 2)
@@ -105,6 +134,10 @@ def get_total_sales_prediction():
 
 
 def plot_sales_prediction():
+    """
+    Plot sales prediction for the next few years
+    :return:
+    """
     p3, df = get_total_sales_prediction()
     fig, ax = plt.subplots()
     ax.set_xlabel('Year')
@@ -121,6 +154,16 @@ def plot_sales_prediction():
 
 
 def plot_market_analysis(electric_sales_df, total_sales_df):
+    """
+    Plot pie-charts for market analysis of changing share of
+    electric vehicles in the automobile market
+    :param electric_sales_df: electric sales
+    :param total_sales_df: total sales
+    :return: None
+    """
+    assert isinstance(electric_sales_df, pd.DataFrame)
+    assert isinstance(total_sales_df, pd.DataFrame)
+
     GraphC = pd.concat([electric_sales_df.T, total_sales_df.T]).T
     GraphC['Electric'] = GraphC['Plug-in hybrid-electric'] + GraphC['Electric']
     GraphC['Electric'] = GraphC['Electric'] / 1000
@@ -162,9 +205,10 @@ def plot_market_analysis(electric_sales_df, total_sales_df):
     fig1.savefig('Market2011.png')
 
 
-def plot_yearly_cost_comaprison():
+def plot_yearly_cost_comparison():
     """
-
+    Plot the comparison of yearly costs over a 10 year life for
+    different types of users for both gas and electric vehicles
     :return:
     """
     df1 = get_df(user_id=60000)
@@ -209,19 +253,20 @@ def plot_yearly_cost_comaprison():
 # needed files : 'summary_2017.xlsx' 'transportation_CO2_by_state_2017.xlsx'
 # 'Insurance.csv'  'maintenance_cost_brands.csv'
 
-def plotEn_pic():
-    '''
-    Plot the picture of the ratio of co2 emissions in transportation over total emissions
-    '''
+def plot_env_emissions():
+    """
+    Plot the picture of the ratio of co2 emissions
+    in transportation over total emissions
+    """
 
-    ##emission in total across USA
-    dataS = pd.read_excel('summary_2017.xlsx')
+    # emission in total across USA
+    dataS = pd.read_excel('data/summary_2017.xlsx')
     dataS = dataS[1:]
     data1 = np.asarray(dataS[54:55])
     data2 = np.asarray(data1[0][1:29])
 
-    ## in transportation
-    data = pd.read_excel('transportation_CO2_by_state_2017.xlsx')
+    # in transportation
+    data = pd.read_excel('data/transportation_CO2_by_state_2017.xlsx')
     dataU = data.copy()
     numpyArray = np.asarray(dataU)
     y = numpyArray[53]
@@ -252,10 +297,10 @@ def plotEn_pic():
 
 
 def plot_insurance():
-    '''
+    """
     Plot the picture of 3 highest and 3 lowest car brands with respect to the
     average yearly insurance
-    '''
+    """
     insurance = pd.read_csv('Insurance.csv')
     copy1 = insurance.copy()
     # compute average cost of each car model
@@ -294,10 +339,10 @@ def plot_insurance():
 
 
 def plot_maintenance():
-    '''
+    """
     Plot the picture of 3 highest and 3 lowest car brands with respect to the
     average yearly maintenance cost
-    '''
+    """
     maintenance = pd.read_csv('maintenance_cost_brands.csv')
     maintenance = maintenance.sort_values('Cost')
     brands = list(maintenance['Car Brand'])
@@ -308,9 +353,7 @@ def plot_maintenance():
     for i in range(len(y)):  ## yearly
         cost = re.sub(r'[$,]', '', y[i])
         y[i] = int(cost) / 10
-    ###plot:
 
-    #     plt.figure(dpi=200, figsize=(8, 6))
     ax = plt.subplot(111)
     ax.bar(x, y, width=0.8)
     plt.ylabel('Maintenance Cost Per Year($)', fontdict={'fontsize': 12})
@@ -324,6 +367,15 @@ def plot_maintenance():
 
 
 def plot_costs_pie(costs_dict, title):
+    """
+    Plot the distribution of various costs as a pie-chart
+    :param costs_dict: keys as cost names and values as actual dollars
+    :param title: title of the plot
+    :return: None
+    """
+    assert isinstance(costs_dict, dict)
+    assert isinstance(title, str)
+
     fig, ax = plt.subplots(figsize=(16, 9), dpi=200, subplot_kw=dict(aspect="equal"))
 
     costs = list(costs_dict.keys())
@@ -352,11 +404,11 @@ def plot_costs_pie(costs_dict, title):
         ang = (p.theta2 - p.theta1)/2. + p.theta1
         y = np.sin(np.deg2rad(ang))
         x = np.cos(np.deg2rad(ang))
-        horizontalalignment = {-1: "right", 1: "left"}[int(np.sign(x))]
-        connectionstyle = "angle,angleA=0,angleB={}".format(ang)
-        kw["arrowprops"].update({"connectionstyle": connectionstyle})
+        horizontal_alignment = {-1: "right", 1: "left"}[int(np.sign(x))]
+        connection_style = "angle,angleA=0,angleB={}".format(ang)
+        kw["arrowprops"].update({"connectionstyle": connection_style})
         ax.annotate(t[i], xy=(x, y), xytext=(1.25*np.sign(x), 1.2*y),
-                    horizontalalignment=horizontalalignment, fontsize=18, **kw)
+                    horizontalalignment=horizontal_alignment, fontsize=18, **kw)
 
     ax.set_title(title, fontsize=20)
 
@@ -364,24 +416,57 @@ def plot_costs_pie(costs_dict, title):
 
 
 def plot_all_cars_costs_pie(df):
+    """
+    Plot costs for all types of cars nationally
+    :param df: dataframe
+    :return:
+    """
+    assert isinstance(df, pd.DataFrame)
+
     national = df[["base", "fuel", "maintenance", "insurance", "env"]]
     avg = dict(national.mean())
     plot_costs_pie(avg, "Average Cost Breakdown")
 
 
 def plot_electric_cars_costs_pie(df):
+    """
+    Plot costs pie for electric cars for the different costs
+    incurred over the 10 year life of a vehicle
+    :param df: data frame
+    :return:
+    """
+    assert isinstance(df, pd.DataFrame)
+
     electric = df[df["fuel_type"] == "e"]
     avg_e = dict(electric[["base", "fuel", "maintenance", "insurance"]].mean())
     plot_costs_pie(avg_e, "Electric Vehicle Cost Breakdown")
 
 
 def plot_gasoline_cars_costs_pie(df):
+    """
+    Plot costs pie for gasoline cars for the different costs
+    incurred over the 10 year life of a vehicle
+    :param df: data frame
+    :return:
+    """
+    assert isinstance(df, pd.DataFrame)
+
     gas = df[df["fuel_type"] == "g"]
     avg_g = dict(gas[["base", "fuel", "maintenance", "insurance", "env"]].mean())
     plot_costs_pie(avg_g, "Gasoline Vehicle Cost Breakdown")
 
 
 def plot_cheapest_cars(df, k=5, name=""):
+    """
+    Plot cheapest cars using the given dataframe
+    :param df: dataframe
+    :param k: top k
+    :param name: title
+    :return: None
+    """
+    assert isinstance(df, pd.DataFrame)
+    assert isinstance(k, int) and k > 0
+    assert isinstance(name, str)
     topk = df.nsmallest(k, "total")
 
     fig, ax = plt.subplots(figsize=(10, 7), dpi=200)
