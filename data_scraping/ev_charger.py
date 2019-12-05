@@ -32,7 +32,7 @@ def scraping_data(nrel_api_key, eia_api_key):
     :return: none
     """
     URL = ("https://developer.nrel.gov/api/alt-fuel-stations/v1.json?" +
-           "api_key=VndyeRDWmKaUeuwDuwhPR3IRIpBpoF7tMs4r2Zc7")
+           "api_key={}").format(nrel_api_key)
     response = requests.get(url=URL)
     data_dict = response.json()
     df = pd.DataFrame(data_dict["fuel_stations"])
@@ -74,16 +74,16 @@ def prepare_data(df_nrel):
     return EV_stations
 
 
-def show_us_charging_facility(EV_stations):
+def show_us_charging_facility(ev_stations):
     """
     show charging facility distribution on a US map
-    :param: EV_stations
+    :param: ev_stations
     :type: DataFrame
 
     :return: none
     """
     facility_dist_dict = dict()
-    for facility in EV_stations['state']:
+    for facility in ev_stations['state']:
         if facility not in facility_dist_dict:
             facility_dist_dict[facility] = 1
         facility_dist_dict[facility] += 1
@@ -112,7 +112,7 @@ def show_us_charging_facility(EV_stations):
 def show_us_charging_station(ev_stations):
     """
     show charging station distribution on a US map
-    :param: EV_stations
+    :param: ev_stations
     :type: DataFrame
 
     :return: none
@@ -238,7 +238,7 @@ def show_us_elec_cost(df_eia):
     :return: none
     """
     fig = go.Figure(data=go.Choropleth(
-        locations=df_eia['Unnamed: 0'],  # Spatial coordinates
+        locations=df_eia['state'],  # Spatial coordinates
         z=df_eia['201908'].astype(float),  # Data to be color-coded
         locationmode='USA-states',
         # set of locations match entries in `locations`
@@ -247,8 +247,8 @@ def show_us_elec_cost(df_eia):
     ))
 
     fig.update_layout(
-        title_text='Lastest US Electricity Cost',
-        geo_scope='usa',  # limite map scope to USA
+        title_text='Latest US Electricity Cost',
+        geo_scope='usa',  # limit map scope to USA
     )
 
     fig.show()
@@ -274,8 +274,8 @@ def show_us_gas_cost(gas_data):
     ))
 
     fig.update_layout(
-        title_text='Last 2019 US Gasoline Prices',
-        geo_scope='usa',  # limite map scope to USA
+        title_text='Latest US Gasoline Prices',
+        geo_scope='usa',  # limit map scope to USA
     )
 
     fig.show()

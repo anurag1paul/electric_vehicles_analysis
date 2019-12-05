@@ -45,7 +45,7 @@ def plot_sales_trend(sales_df):
     plt.title('Electric Vehicle Sales')
     plt.tight_layout()
     plt.show()
-    fig.savefig('ElectricSales.png')
+    fig.savefig('plots/ElectricSales.png')
 
 
 def get_sales_projection(df):
@@ -94,7 +94,17 @@ def plot_sales_projection(sales_df):
     ax.legend(loc='upper left')
     plt.tight_layout()
     plt.show()
-    fig.savefig('ElectricSalesProjection.png')
+    fig.savefig('plots/ElectricSalesProjection.png')
+
+
+def get_total_sales_df():
+    """
+    Read and return the total sales data frame
+    :return: data frame
+    """
+    data1 = 'data/TotalSales.csv'
+    df = pd.read_csv(data1, index_col=0)
+    return df
 
 
 def plot_total_sales():
@@ -117,7 +127,7 @@ def plot_total_sales():
     plt.title('Total Car Sales')
     plt.tight_layout()
     plt.show()
-    fig.savefig('TotalSales.png')
+    fig.savefig('plots/TotalSales.png')
 
 
 def get_total_sales_prediction():
@@ -150,7 +160,7 @@ def plot_sales_prediction():
     ax.plot(xp, p3(xp), '--', label='Total Sales Projection')
     ax.legend(loc='lower left')
     plt.show()
-    fig.savefig('TotalSalesPrediction.png')
+    fig.savefig('plots/TotalSalesPrediction.png')
 
 
 def plot_market_analysis(electric_sales_df, total_sales_df):
@@ -188,7 +198,7 @@ def plot_market_analysis(electric_sales_df, total_sales_df):
     plt.title('2021 (Projected)')
     plt.tight_layout()
     plt.show()
-    fig1.savefig('Market2021.png')
+    fig1.savefig('plots/Market2021.png')
 
     labels = ['Electric', 'Gas']
     sizes = [p1(2011) + p2(2011), (p3(2011)) - (p1(2011) + p2(2011))]
@@ -202,7 +212,7 @@ def plot_market_analysis(electric_sales_df, total_sales_df):
     plt.title('2011')
     plt.tight_layout()
     plt.show()
-    fig1.savefig('Market2011.png')
+    fig1.savefig('plots/Market2011.png')
 
 
 def plot_yearly_cost_comparison():
@@ -211,9 +221,9 @@ def plot_yearly_cost_comparison():
     different types of users for both gas and electric vehicles
     :return:
     """
-    df1 = get_df(user_id=60000)
-    df2 = get_df(user_id=120000)
-    df3 = get_df(user_id=180000)
+    df1 = get_df(user_id=6000)
+    df2 = get_df(user_id=12000)
+    df3 = get_df(user_id=18000)
 
     df1['Yearly'] = (df1['total'] - df1['base']) / 10
     df1 = df1.sort_values('Yearly')
@@ -247,7 +257,7 @@ def plot_yearly_cost_comparison():
     ax.legend((rects2[0], rects1[0]), ('Gas', 'Electric'), loc='upper left')
     plt.tight_layout()
     plt.show()
-    fig.savefig('YearlyEvG.png')
+    fig.savefig('plots/YearlyEvG.png')
 
 
 # needed files : 'summary_2017.xlsx' 'transportation_CO2_by_state_2017.xlsx'
@@ -280,7 +290,7 @@ def plot_env_emissions():
     ##plot
 
     #plt.figure(dpi=600)
-    ax = plt.subplot(111)
+    fig, ax = plt.subplots(figsize=(8, 6), dpi=200)
     ax.plot(x2, y)
     plt.ylabel('Ratio')
     plt.xlabel('Year')
@@ -301,7 +311,7 @@ def plot_insurance():
     Plot the picture of 3 highest and 3 lowest car brands with respect to the
     average yearly insurance
     """
-    insurance = pd.read_csv('Insurance.csv')
+    insurance = pd.read_csv('data/Insurance.csv')
     copy1 = insurance.copy()
     # compute average cost of each car model
     copy1['Model'] = 0
@@ -326,7 +336,7 @@ def plot_insurance():
     ##plot:
 
     #plt.figure(dpi=200, figsize=(8, 6))
-    ax = plt.subplot(111)
+    fig, ax = plt.subplots(figsize=(8, 6), dpi=200)
     ax.bar(x, y, width=0.8)
     plt.ylabel('Average Insurance Per Year($)', fontdict={'fontsize': 12})
     plt.title('3 Highest Brand and 3 Lowest Brand')
@@ -343,7 +353,7 @@ def plot_maintenance():
     Plot the picture of 3 highest and 3 lowest car brands with respect to the
     average yearly maintenance cost
     """
-    maintenance = pd.read_csv('maintenance_cost_brands.csv')
+    maintenance = pd.read_csv('data/maintenance_cost_brands.csv')
     maintenance = maintenance.sort_values('Cost')
     brands = list(maintenance['Car Brand'])
     costs = list(maintenance['Cost'])
@@ -354,7 +364,7 @@ def plot_maintenance():
         cost = re.sub(r'[$,]', '', y[i])
         y[i] = int(cost) / 10
 
-    ax = plt.subplot(111)
+    fig, ax = plt.subplots(figsize=(8, 6), dpi=200)
     ax.bar(x, y, width=0.8)
     plt.ylabel('Maintenance Cost Per Year($)', fontdict={'fontsize': 12})
     plt.title('3 Highest Brand and 3 Lowest Brand')

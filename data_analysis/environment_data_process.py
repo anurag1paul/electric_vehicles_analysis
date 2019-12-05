@@ -3,8 +3,8 @@ import numpy as np
 
 
 ## data source : https://www.eia.gov/tools/faqs/faq.php?id=74&t=11
-dataElectric = pd.read_excel('annual_generation_state.xls')
-dataCarbon = pd.read_excel('emission_annual.xls')
+dataElectric = pd.read_excel('data/annual_generation_state.xls')
+dataCarbon = pd.read_excel('data/emission_annual.xls')
 
 ### preprocessing data:
 dataCarbon= dataCarbon[dataCarbon['Year']==2018]

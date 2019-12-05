@@ -1,0 +1,52 @@
+,states,prices,FIPS,state_abbr
+0,Louisiana,2.169,22,LA
+1,Mississippi,2.21,28,MS
+2,South Carolina,2.2680000000000002,45,SC
+3,Texas,2.273,48,TX
+4,Oklahoma,2.274,40,OK
+5,Alabama,2.28,01,AL
+6,Arkansas,2.3,05,AR
+7,Missouri,2.3040000000000003,29,MO
+8,Virginia,2.3280000000000003,51,VA
+9,Kansas,2.3480000000000003,20,KS
+10,Tennessee,2.351,47,TN
+11,Wisconsin,2.385,55,WI
+12,Florida,2.394,12,FL
+13,North Carolina,2.421,37,NC
+14,Georgia,2.435,13,GA
+15,Kentucky,2.452,21,KY
+16,New Hampshire,2.456,33,NH
+17,Delaware,2.465,10,DE
+18,South Dakota,2.475,46,SD
+19,New Mexico,2.494,35,NM
+20,Iowa,2.497,19,IA
+21,Indiana,2.499,18,IN
+22,Minnesota,2.501,27,MN
+23,Rhode Island,2.502,44,RI
+24,Maryland,2.511,24,MD
+25,North Dakota,2.5140000000000002,38,ND
+26,Ohio,2.5269999999999997,39,OH
+27,Nebraska,2.536,31,NE
+28,Michigan,2.542,26,MI
+29,Maine,2.55,23,ME
+30,Massachusetts,2.552,25,MA
+31,West Virginia,2.575,54,WV
+32,New Jersey,2.594,34,NJ
+33,Vermont,2.64,50,VT
+34,Connecticut,2.653,09,CT
+35,Washington DC,2.657,11,DC
+36,Illinois,2.6639999999999997,17,IL
+37,New York,2.682,36,NY
+38,Wyoming,2.6889999999999996,56,WY
+39,Montana,2.7039999999999997,30,MT
+40,Colorado,2.766,08,CO
+41,Pennsylvania,2.7760000000000002,42,PA
+42,Utah,2.892,49,UT
+43,Arizona,2.937,04,AZ
+44,Idaho,2.9730000000000003,16,ID
+45,Alaska,3.137,02,AK
+46,Oregon,3.326,41,OR
+47,Nevada,3.364,32,NV
+48,Washington,3.431,53,WA
+49,Hawaii,3.605,15,HI
+50,California,4.053999999999999,06,CA

@@ -5,7 +5,7 @@ from data_analysis.cost_model import state_list
 from data_analysis.df_gen import get_df
 from data_scraping.gas_prices import get_state_dict
 
-data = np.load("master_dict.npy", allow_pickle=True).item()
+data = np.load("data/master_dict.npy", allow_pickle=True).item()
 
 
 def find_critical_points():
@@ -21,10 +21,10 @@ def find_critical_points():
     states = []
 
     for state in state_list:
-        avg_6 = get_df(user_id=60000, state=state).set_index(["name", "fuel_type"])
+        avg_6 = get_df(user_id=6000, state=state).set_index(["name", "fuel_type"])
         avg_6["yearly"] = avg_6["total"] - avg_6["base"]
 
-        avg_18 = get_df(user_id=180000, state=state).set_index(["name", "fuel_type"])
+        avg_18 = get_df(user_id=18000, state=state).set_index(["name", "fuel_type"])
         avg_18["yearly"] = avg_18["total"] - avg_18["base"]
 
         delta = (avg_18 - avg_6) / 12000
