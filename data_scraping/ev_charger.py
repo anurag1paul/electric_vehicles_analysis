@@ -1,7 +1,8 @@
+import os
+
 import requests
 import pandas as pd
 import plotly.graph_objects as go
-import numpy as np
 import math
 
 from data_analysis.cost_model import state_list
@@ -15,6 +16,9 @@ def import_data(nrel_data, eia_data):
 
     :return: DataFrame, DataFrame
     """
+    assert isinstance(nrel_data, str) and os.path.exists(nrel_data)
+    assert isinstance(eia_data, str) and os.path.exists(eia_data)
+
     # EV Charging Station Data
     df_nrel = pd.read_excel(nrel_data)
     # Electricity Cost Data
@@ -23,7 +27,7 @@ def import_data(nrel_data, eia_data):
     return df_nrel, df_eia
 
 
-def scraping_data(nrel_api_key, eia_api_key):
+def scrape_ev_data(nrel_api_key, eia_api_key):
     """
     scrap data from nrel and eia website using given api keys
     :param: nrel_api_key, eia_api_key
@@ -31,6 +35,9 @@ def scraping_data(nrel_api_key, eia_api_key):
 
     :return: none
     """
+    assert isinstance(nrel_api_key, str) and len(nrel_api_key) > 0
+    assert isinstance(eia_api_key, str) and len(eia_api_key) > 0
+
     URL = ("https://developer.nrel.gov/api/alt-fuel-stations/v1.json?" +
            "api_key={}").format(nrel_api_key)
     response = requests.get(url=URL)
@@ -62,6 +69,7 @@ def prepare_data(df_nrel):
 
     :return: DataFrame
     """
+    assert isinstance(df_nrel, pd.DataFrame)
     field_of_interest = ['fuel_type_code', 'city', 'state', 'zip', 'country',
                          'status_code', 'access_code', 'owner_type_code',
                          'ev_level1_evse_num', 'ev_level2_evse_num',
@@ -82,6 +90,8 @@ def show_us_charging_facility(ev_stations):
 
     :return: none
     """
+    assert isinstance(ev_stations, pd.DataFrame)
+
     facility_dist_dict = dict()
     for facility in ev_stations['state']:
         if facility not in facility_dist_dict:
@@ -117,6 +127,8 @@ def show_us_charging_station(ev_stations):
 
     :return: none
     """
+    assert isinstance(ev_stations, pd.DataFrame)
+
     facility_dist_dict = dict()
     for facility in ev_stations['state']:
         if facility not in facility_dist_dict:
@@ -173,6 +185,8 @@ def show_us_station_per_site(ev_stations):
 
     :return: none
     """
+    assert isinstance(ev_stations, pd.DataFrame)
+
     facility_dist_dict = dict()
     for facility in ev_stations['state']:
         if facility not in facility_dist_dict:
@@ -237,6 +251,7 @@ def show_us_elec_cost(df_eia):
 
     :return: none
     """
+    assert isinstance(df_eia, pd.DataFrame)
     fig = go.Figure(data=go.Choropleth(
         locations=df_eia['state'],  # Spatial coordinates
         z=df_eia['201908'].astype(float),  # Data to be color-coded
@@ -262,6 +277,8 @@ def show_us_gas_cost(gas_data):
 
     :return: none
     """
+    assert isinstance(gas_data, str) and os.path.exists(gas_data)
+
     gas_price = pd.read_csv(gas_data)
     gas_price = gas_price.set_index('state_abbr')
     fig = go.Figure(data=go.Choropleth(
@@ -289,6 +306,8 @@ def show_us_elec_cost_all(df_eia):
 
     :return: none
     """
+    assert isinstance(df_eia, pd.DataFrame)
+
     # Create figure
     fig = go.Figure()
 

@@ -14,7 +14,6 @@ def create_manual_checklist():
 
     :return: none
     """
-    car_data = pd.read_csv('data/car_data_kaggle.csv')
     insurance_data = pd.read_csv('data/insurance.csv')
 
     make_model_str_set = set()
@@ -60,6 +59,8 @@ def read_manual_checklist(manual_checklist, name_map):
 
     :return: DataFrame
     """
+    assert isinstance(manual_checklist, str)
+
     manual_decision = pd.read_csv(manual_checklist)
     insurance_data = pd.read_csv('data/insurance.csv')
     for row in manual_decision.iterrows():

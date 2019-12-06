@@ -1,7 +1,5 @@
 import pandas as pd
-import math
 import requests
-from tqdm import tqdm
 
 
 def fuse_rows(df, n):
@@ -18,7 +16,8 @@ def fuse_rows(df, n):
                 else:
                     df.values[0][col] = df.values[row][col]
 
-def scrapeData():
+
+def scrape_sales_data():
     """
     Function used to scrape and clean data
 
@@ -80,5 +79,5 @@ def scrapeData():
     Plot4b = Plot4b[['Make', 'Model', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']]
 
     GraphA = Plot3a.iloc[:,12:].T
-    GraphA.to_csv('ElectricSales.csv')
-    Plot4b.to_csv('CarSales.csv')
+    GraphA.to_csv('data/ElectricSales.csv')
+    Plot4b.to_csv('data/CarSales.csv')

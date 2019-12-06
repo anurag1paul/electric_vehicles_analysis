@@ -3,7 +3,7 @@ import os
 import pandas as pd
 
 
-def get_maintenance_costs_brand(folder=None):
+def scrape_maintenance_costs_brand(folder=None):
     """
     Scrape yourmechanic.com to get maintenance_cost
     for 10 years for different brands
